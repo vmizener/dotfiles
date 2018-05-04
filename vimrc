@@ -6,7 +6,7 @@
 " =========
 " 2018 May 04
 "   Courtesy http://nvie.com/posts/how-i-boosted-my-vim/
-"   - Added leader key mapping (space)
+"   - Added leader key mapping (comma)
 "   - Dropped F12 show chars in favor of passively showing chars
 "   - Undo history is now 500
 "   - Clearing search history is now <Leader>/ instead of :C
@@ -89,6 +89,9 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
+" Get some leader key action in here
+let mapleader=","
+
 """""""""""""""""""""'
 " Display Settings
 """""""""""""""""""""'
@@ -163,9 +166,6 @@ set nobackup            " Do not keep the backup~ file
 """""""""""""""""""""'
 " Interface Settings
 """""""""""""""""""""'
-
-" Get some leader key action in here
-map <Space> \
 
 set history=500     " Significantly increase command line history
 set mouse=a         " Allow mouse functionality in all modes
