@@ -1,0 +1,7 @@
+startup_message off     # Disable welcome message
+vbell off               # Disable 'wuff wuff'
+defshell -$SHELL
+
+# Allow scrolling in all xterm windows
+termcapinfo xterm* ti@:te@
+term xterm-256color

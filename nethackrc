@@ -1,0 +1,13 @@
+# === OPTIONS ===
+OPTIONS=!autopickup, autodig, hilite_pet
+OPTIONS=fruit:Chocolate Frosted Sugar Bombs
+OPTIONS=boulder:0
+
+OPTIONS=catname:Jennifer Aniston
+OPTIONS=dogname:Esteemed Gallant Ser Barkums of the most ancient house of Woofsalot
+OPTIONS=horsename:Rocinante
+
+OPTIONS=showexp, time
+OPTIONS=color
+# OPTIONS=color, menucolors
+OPTIONS=DECgraphics
