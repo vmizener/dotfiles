@@ -14,6 +14,10 @@
 "   Added pastetoggle key (F2)
 "   Use jk to get out of insert mode now
 "   Fold toggle now is <Leader><Space> (instead of just <Space>)
+"   Now uses autoread
+"   Now keeps lines above and below the cursor at all times
+"   Pathogen enabled
+"   Removed textwidth (autowrap)
 "
 " 2018 May 01
 "   Folds are closed by default now
@@ -85,12 +89,11 @@
 "   (6.82 released today wow)
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Use Vim settings instead of Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
+set nocompatible            " We all about that IMPROVED game
+let mapleader=","           " C O M M A L I F E
 
-" Get some leader key action in here
-let mapleader=","
+" Custom path handling?  Feelsgoodman
+execute pathogen#infect()
 
 """""""""""""""""""""'
 " Display Settings
@@ -101,6 +104,7 @@ set encoding=utf-8  " Encoding used for displaying files
 " set nowrap          " Disable line wrapping
 set number          " Show line numbers on left
 set ruler           " Always show cursor position (numbers at bottom)
+set scrolloff=10    " Always show 5 lines above/below cursor
 set showcmd         " Display incomplete commands
 set showmatch       " Highlight matching braces
 set showmode        " Always show current mode (e.g. INSERT)
@@ -129,7 +133,7 @@ set nojoinspaces    " No extra space after '.' when joining lines
 set shiftwidth=4    " Set indentation depth to 4 columns
 set softtabstop=4   " Backspacing over 4 spaces like over tabs
 set tabstop=4       " Set tabular length to 4 columns
-set textwidth=80    " Wrap lines automatically at the 80th column
+" set textwidth=80    " Wrap lines automatically at the 80th column
 
 set foldlevelstart=20   " Files are opened with closed folds (20 deep)
 set pastetoggle=<F2>    " Toggle paste setting
@@ -158,7 +162,9 @@ vnoremap <Leader><Space> za
 """""""""""""""""""""'
 
 filetype on             " Enable filetype detection
+filetype plugin indent on
 
+set autoread            " Automatically load file changes
 set confirm             " Require :q! in case of unsaved changes
 set fileencoding=utf-8  " Encoding used for writing files
 set nobackup            " Do not keep the backup~ file
