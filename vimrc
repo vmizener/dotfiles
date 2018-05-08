@@ -4,6 +4,10 @@
 "
 " Changelog
 " =========
+" 2018 May 08
+"   - Added relative numbering
+"   - Mustang color scheme (minorly edited, check syntax file)
+"
 " 2018 May 04
 "   Courtesy http://nvie.com/posts/how-i-boosted-my-vim/
 "   - Added leader key mapping (comma)
@@ -102,7 +106,8 @@ execute pathogen#infect()
 set cursorline      " Highlight the current cursor line
 set encoding=utf-8  " Encoding used for displaying files
 " set nowrap          " Disable line wrapping
-set number          " Show line numbers on left
+set number          " Show aboslute line numbers on left
+set relativenumber  " Show relative line numbers on left (overrides number except on current line)
 set ruler           " Always show cursor position (numbers at bottom)
 set scrolloff=10    " Always show 5 lines above/below cursor
 set showcmd         " Display incomplete commands
@@ -113,6 +118,7 @@ syntax on           " Turn on color syntax highlighting
 " setlocal spell spelllang=en_us  " Enable spellcheck
 " Get theme colors
 colorscheme desert
+silent! colorscheme mustang     " Use mustang instead of it's there
 
 """""""""""""""""""""'
 " Edit Settings
