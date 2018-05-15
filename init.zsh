@@ -93,5 +93,6 @@ bindkey "^[[4~" end-of-line
 
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 alias ls='ls -GFh'
+alias python='python3'
 alias resrc='. ~/.zshrc'
 alias vi='vim'
