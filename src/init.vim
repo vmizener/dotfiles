@@ -1,6 +1,19 @@
 """"""""""""""""""""""
 " NEOVIM NEOVIM NEOVIM
 "
+" Use with Plug (https://github.com/junegunn/vim-plug)
+" Install plugins with `nvim +PlugInstall +qall`
+"
+" Thu May 17 2018
+"   - Added Gitgutter
+"   - Added IndentLine
+"
+" Tue May 15 2018
+"   - Added system clipboard copy/paste
+"   - Reduced keymap timeouts
+"   - Escape visual mode with `<Space>` now instead of `jk`
+"   - Minor terminal stuff improvements
+"
 " Mon May 14 2018
 "   - Added more shortcuts for Neomake and location list manipulation
 "   - Added terminal stuff
@@ -28,13 +41,17 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'kien/ctrlp.vim'
     " Fugitive is a Git wrapper for vim
     Plug 'tpope/vim-fugitive'
+    " Gitgutter shows a Git diff in the sign column asynchonously
+    Plug 'airblade/vim-gitgutter'
     " Gruvbox is a colorscheme for vim
     Plug 'morhetz/gruvbox'
+    " IndentLine provides an indentation guide
+    Plug 'Yggdroot/indentLine'
     " Jedi-Vim is an autocompletion library for Python
     Plug 'davidhalter/jedi-vim'
     " Neomake is an asynchronous make/linter tool for neovim
     Plug 'neomake/neomake'
-    " Nerdtree provides is a directory preview tool
+    " Nerdtree is a directory preview tool
     Plug 'scrooloose/nerdtree'
     " Supertab is a code-completion tool
     Plug 'ervandew/supertab'
@@ -45,10 +62,11 @@ call plug#end()
 " General Config & I/O {
     let mapleader=','   " Use ',' as the leader key
     set confirm         " Confirm quit if there're unsaved changes
-    set history=500     " More history
-    set mouse=a         " More mouse
-    set undolevels=500  " More undo
-    set ttimeoutlen=50  " More timeout
+    set history=500     " MORE history
+    set mouse=a         " MORE mouse
+    set undolevels=500  " MOAR undo
+    set timeoutlen=250  " Less timeout?
+    set ttimeoutlen=10  " Keycode timeouts?  Who the what?
 
     filetype on         " Detect filetypes
     filetype plugin on  " Run plugins for specific filetypes
@@ -74,11 +92,10 @@ call plug#end()
     nnoremap <silent> <Leader>sc :source $MYVIMRC<CR>
     " Toggle line wrap
     nnoremap <silent> <Leader>w :set wrap! wrap?<CR>
-    " Get to normal mode with `jk`
+    " Get to normal mode with `jk` or `<Space>`
     inoremap jk <Esc>
     inoremap kj <Esc>
-    vnoremap jk <Esc>
-    vnoremap kj <Esc>
+    vnoremap <Space> <Esc>
     " Navigate wrapped lines
     nnoremap j gj
     nnoremap k gk
@@ -95,6 +112,13 @@ call plug#end()
     vmap <C-y> :w! ${HOME}/.vbuf<CR>
     nmap <C-y> :.w! ${HOME}/.vbuf<CR>
     nmap <C-p> :r ${HOME}/.vbuf<CR>
+    " Copy and paste from system clipboard (may require X)
+    nnoremap <Leader>p "+p
+    nnoremap <Leader>P "+P
+    vnoremap <Leader>p "+p
+    vnoremap <Leader>P "+P
+    vnoremap <Leader>y "+y
+    vnoremap <Leader>d "+d
     " Toggle paste mode
     set pastetoggle=<F2>
 " }
@@ -103,20 +127,20 @@ call plug#end()
     " Colorscheme
     set bg=dark
     colorscheme gruvbox
-
     " Display Settings {
         set foldlevelstart=20   " Open files with closed folds
         set number              " Show absolute line numbers on left
-        set relativenumber      " Show relative line numbers on left (overrides number excetp on current line)
+        set relativenumber      " Show relative line numbers on left (overrides number except on current line)
         set scrolloff=10        " Leave lines above/below cursor
         set splitbelow          " Always split below current buffer
         set splitright          " Always split right of current buffer
-
+        " Automatically show absolute numbering only when in insert mode
+        autocmd InsertEnter * :set norelativenumber
+        autocmd InsertLeave * :set relativenumber
         " See all the characters
         set list
         set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:+
     " }
-
     " Buffers, Tabs, Windows {
         " Buffers {
             " Navigate buffers
@@ -154,12 +178,12 @@ call plug#end()
         autocmd TermOpen * set bufhidden=hide
         " Open a terminal
         nnoremap <silent> <Leader>tt :terminal<CR>i
-        nnoremap <silent> <Leader>tv :vnew<CR>:terminal<CR>i
-        nnoremap <silent> <Leader>th :new<CR>:terminal<CR>i
+        nnoremap <silent> <Leader>tv :vnew<CR><Esc>:terminal<CR>i
+        nnoremap <silent> <Leader>th :new<CR><Esc>:terminal<CR>i
         " Escape a terminal
         tnoremap <Esc> <C-\><C-n>
         " Close a terminal
-        tnoremap <C-x> <C-\><C-n><C-w>q
+        tnoremap <C-x> <C-\><C-n>:b#\|bd! #<CR>
     " }
     " Search Settings {
         set hlsearch    " Highlight search results
@@ -209,18 +233,17 @@ call plug#end()
         let g:airline_left_alt_sep = ''
         let g:airline_right_sep = ''
         let g:airline_right_alt_sep = ''
-        let g:airline#extensions#ale#enabled = 1
     " }
     " CtrlP {
         " Prompt for where to open files after a <C-o>
         let g:ctrlp_arg_map = 1
-
         " Open file menu
         nnoremap <Leader>oo :CtrlP<CR>
         " Open buffer menu
         nnoremap <Leader>ob :CtrlPBuffer<CR>
         " Open most recently used files
         nnoremap <Leader>of :CtrlPMRUFiles<CR>
+    " }
     " Fugitive {
         nnoremap <Leader>gc :Gcommit<CR>
         nnoremap <Leader>gd :Gdiff HEAD<CR>
@@ -229,6 +252,10 @@ call plug#end()
         nnoremap <Leader>gp :Gpush<CR>
         nnoremap <Leader>gs :Gstatus<CR>
         nnoremap <Leader>gw :Gwrite<CR>
+    " }
+    " IndentLine {
+        " The default char is pretty good too but we about that UNICODE LIFE
+        let g:indentLine_char = '┆'
     " }
     " Nerdtree {
         " Toggle the tree
