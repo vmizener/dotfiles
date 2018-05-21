@@ -4,6 +4,12 @@
 " Use with Plug (https://github.com/junegunn/vim-plug)
 " Install plugins with `nvim +PlugInstall +qall`
 "
+" Mon May 21 2018
+"   - Quick folding is now z<Space>
+"   - Increased keymap timeout to 500 (up from 250)
+"   - Quick edit of this file now looks for itself in ~/.dotfiles
+"   - Quick edit of this file now puts itself in a new tab
+"
 " Thu May 17 2018
 "   - Added Gitgutter
 "   - Added IndentLine
@@ -88,7 +94,7 @@ call plug#end()
 
 " Controls and Shortcuts {
     " Edit and source this file
-    nnoremap <silent> <Leader>ec :e $MYVIMRC<CR>
+    nnoremap <silent> <Leader>ec :tabedit ~/.dotfiles/src/init.vim<CR>
     nnoremap <silent> <Leader>sc :source $MYVIMRC<CR>
     " Toggle line wrap
     nnoremap <silent> <Leader>w :set wrap! wrap?<CR>
@@ -106,8 +112,8 @@ call plug#end()
     vnoremap <Tab> >gv
     vnoremap <S-Tab> <gv
     " Quick folding
-    nnoremap <Leader>z za
-    vnoremap <Leader>z za
+    nnoremap z<Space> za
+    vnoremap z<Space> za
     " Copy and paste from a buffer
     vmap <C-y> :w! ${HOME}/.vbuf<CR>
     nmap <C-y> :.w! ${HOME}/.vbuf<CR>
