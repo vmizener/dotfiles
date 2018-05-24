@@ -4,6 +4,18 @@
 " Use with Plug (https://github.com/junegunn/vim-plug)
 " Install plugins with `nvim +PlugInstall +qall`
 "
+" Wed May 23 2018
+"   - Quick edit of this file now resolves symlink rather than hardcodes path
+"   - Reorganized the hotkeys section
+"   - `Y` now copies to end of line instead of being an alias for `yy`
+"   - Added spellcheck options
+"   - Clipboard copy/paste expanded
+"   - Added hotkey to go to last buffer
+"   - Airline symbols added
+"       - Requires a supported font
+"       - https://github.com/source-foundry/Hack
+"   - Added Gitgutter hotkeys to jump between hunks
+"
 " Mon May 21 2018
 "   - Quick folding is now z<Space>
 "   - Increased keymap timeout to 500 (up from 250)
@@ -41,13 +53,15 @@ call plug#begin('~/.config/nvim/plugged')
 
     " Airline provides a better status line and a tab bar
     Plug 'bling/vim-airline'
+    " Ale is an 'asynchronous linting engine'
+    "Plug 'w0rp/ale'
     " Bufferline shows your current buffers in the status line
     Plug 'bling/vim-bufferline'
     " Ctrl-P is a fuzzy file finder tool
     Plug 'kien/ctrlp.vim'
     " Fugitive is a Git wrapper for vim
     Plug 'tpope/vim-fugitive'
-    " Gitgutter shows a Git diff in the sign column asynchonously
+    " Gitgutter shows a Git diff in the sign column asynchronously
     Plug 'airblade/vim-gitgutter'
     " Gruvbox is a colorscheme for vim
     Plug 'morhetz/gruvbox'
@@ -93,46 +107,61 @@ call plug#end()
 " }
 
 " Controls and Shortcuts {
-    " Edit and source this file
-    nnoremap <silent> <Leader>ec :tabedit ~/.dotfiles/src/init.vim<CR>
-    nnoremap <silent> <Leader>sc :source $MYVIMRC<CR>
-    " Toggle line wrap
-    nnoremap <silent> <Leader>w :set wrap! wrap?<CR>
-    " Get to normal mode with `jk` or `<Space>`
-    inoremap jk <Esc>
-    inoremap kj <Esc>
-    vnoremap <Space> <Esc>
-    " Navigate wrapped lines
-    nnoremap j gj
-    nnoremap k gk
-    " Indentation with tab key 
-    nnoremap <Tab> >>_
-    nnoremap <S-Tab> <<
-    inoremap <S-Tab> <C-d>
-    vnoremap <Tab> >gv
-    vnoremap <S-Tab> <gv
-    " Quick folding
-    nnoremap z<Space> za
-    vnoremap z<Space> za
-    " Copy and paste from a buffer
-    vmap <C-y> :w! ${HOME}/.vbuf<CR>
-    nmap <C-y> :.w! ${HOME}/.vbuf<CR>
-    nmap <C-p> :r ${HOME}/.vbuf<CR>
-    " Copy and paste from system clipboard (may require X)
-    nnoremap <Leader>p "+p
-    nnoremap <Leader>P "+P
-    vnoremap <Leader>p "+p
-    vnoremap <Leader>P "+P
-    vnoremap <Leader>y "+y
-    vnoremap <Leader>d "+d
-    " Toggle paste mode
-    set pastetoggle=<F2>
+    " Modifying this file {
+        nnoremap <silent> <Leader>ec :execute "tabedit" resolve($MYVIMRC)<CR>
+        nnoremap <silent> <Leader>sc :source $MYVIMRC<CR>
+    " }
+    " Layout and appearance {
+        " Toggle line wrap
+        nnoremap <silent> <Leader>w :set wrap! wrap?<CR>
+        " Quick folding
+        nnoremap z<Space> za
+        vnoremap z<Space> za
+    " }
+    " Navigation and switching modes {
+        " Get to normal mode with `jk` or `<Space>`
+        inoremap jk <Esc>
+        inoremap kj <Esc>
+        vnoremap <Space> <Esc>
+        " Navigate wrapped lines
+        nnoremap j gj
+        nnoremap k gk
+        " Toggle spell check mode
+        nnoremap <silent> <F3> :set spell! spell?<CR>
+        vnoremap <silent> <F3> <Esc>:set spell! spell?<CR>gv
+        " Toggle paste mode
+        set pastetoggle=<F2>
+    " }
+    " Editing and formatting {
+        " Indentation with tab key 
+        nnoremap <Tab> >>_
+        nnoremap <S-Tab> <<
+        inoremap <S-Tab> <C-d>
+        vnoremap <Tab> >gv
+        vnoremap <S-Tab> <gv
+        " Copy and paste from a buffer
+        vmap <C-y> :w! ${HOME}/.vbuf<CR>
+        nmap <C-y> :.w! ${HOME}/.vbuf<CR>
+        nmap <C-p> :r ${HOME}/.vbuf<CR>
+        " `Y` copies to end of line (is normally an alias for `yy`)
+        nmap Y y$
+        " Copy and paste from system clipboard (may require X)
+        nnoremap <Leader>p "+p
+        nnoremap <Leader>P "+P
+        nnoremap <Leader>y "+y
+        nnoremap <Leader>Y "+y$
+        vnoremap <Leader>p "+p
+        vnoremap <Leader>P "+P
+        vnoremap <Leader>y "+y
+        vnoremap <Leader>d "+d
+    " }
 " }
 
 " Interface {
-    " Colorscheme
-    set bg=dark
-    colorscheme gruvbox
+    " Colorscheme {
+        set bg=dark
+        colorscheme gruvbox
+    " }
     " Display Settings {
         set foldlevelstart=20   " Open files with closed folds
         set number              " Show absolute line numbers on left
@@ -152,6 +181,7 @@ call plug#end()
             " Navigate buffers
             nnoremap <Leader>bp  :bprev<CR>
             nnoremap <Leader>bn  :bnext<CR>
+            nnoremap <Leader>bb  :b#<CR>
             " Close/Kill buffers (without closing windows)
             nnoremap <silent> <Leader>bd :lclose\|b#\|bd #<CR>
             nnoremap <silent> <Leader>bk :lclose\|b#\|bd! #<CR>
@@ -195,7 +225,7 @@ call plug#end()
         set hlsearch    " Highlight search results
         set incsearch   " Do incremental search
         set ignorecase  " Do case-insensitive search ...
-        set smartcase   " ... unless capital letters are used
+        set smartcase   " ...unless capital letters are used
         " Clear search
         nmap <silent> <Leader>/ :nohlsearch<CR>
         " Center view on search results
@@ -229,16 +259,31 @@ call plug#end()
 " Plugin Settings {
     " Airline {
         let g:airline#extensions#tabline#enabled = 1
-        let g:airline#extensions#tabline#buffer_idx_mode = 1
         let g:airline#extensions#tabline#fnamemod = ':t'
-        let g:airline#extensions#tabline#left_sep = ''
+        let g:airline#extensions#tabline#left_sep = ''
         let g:airline#extensions#tabline#left_alt_sep = ''
-        let g:airline#extensions#tabline#right_sep = ''
+        let g:airline#extensions#tabline#right_sep = ''
         let g:airline#extensions#tabline#right_alt_sep = ''
-        let g:airline_left_sep = ''
-        let g:airline_left_alt_sep = ''
-        let g:airline_right_sep = ''
-        let g:airline_right_alt_sep = ''
+        let g:airline_left_sep = ''
+        let g:airline_left_alt_sep = ''
+        let g:airline_right_sep = ''
+        let g:airline_right_alt_sep = ''
+
+        if !exists('g:airline_symbols')
+            let g:airline_symbols = {}
+        endif
+        "let g:airline_symbols.branch = ''
+        let g:airline_symbols.branch = 'ᚠ'
+        let g:airline_symbols.readonly = ''
+        "let g:airline_symbols.linenr = '☰'
+        let g:airline_symbols.linenr = '㏑'
+        "let g:airline_symbols.maxlinenr = '㏑'
+        let g:airline_symbols.maxlinenr = ''
+        let g:airline_symbols.paste = 'PASTE'
+        let g:airline_symbols.spell = 'Ꞩ'
+    " }
+    " Bufferline {
+        let g:bufferline_show_bufnr = 0
     " }
     " CtrlP {
         " Prompt for where to open files after a <C-o>
@@ -250,7 +295,7 @@ call plug#end()
         " Open most recently used files
         nnoremap <Leader>of :CtrlPMRUFiles<CR>
     " }
-    " Fugitive {
+    " Fugitive / Gitgutter {
         nnoremap <Leader>gc :Gcommit<CR>
         nnoremap <Leader>gd :Gdiff HEAD<CR>
         nnoremap <Leader>gf :Gfetch<CR>
@@ -258,6 +303,9 @@ call plug#end()
         nnoremap <Leader>gp :Gpush<CR>
         nnoremap <Leader>gs :Gstatus<CR>
         nnoremap <Leader>gw :Gwrite<CR>
+
+        nnoremap <Leader>gj :GitGutterNextHunk<CR>
+        nnoremap <Leader>gk :GitGutterPrevHunk<CR>
     " }
     " IndentLine {
         " The default char is pretty good too but we about that UNICODE LIFE
@@ -268,7 +316,7 @@ call plug#end()
         nnoremap <silent> <Leader><Space> :NERDTreeToggle<CR>
     " }
     " Supertab {
-        " Esc during a tab completion undoes any completion
+        " `<Esc>` during a tab completion undoes any completion
         let g:SuperTabRetainCompletionDuration = 'completion'
     " }
     " Neomake {
