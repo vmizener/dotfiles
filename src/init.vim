@@ -4,6 +4,12 @@
 " Use with Plug (https://github.com/junegunn/vim-plug)
 " Install plugins with `nvim +PlugInstall +qall`
 "
+" Thu May 24 2018
+"   - Automatic views (doesn't run on terminal buffers)
+"   - Nowrap now set by default
+"   - Supertab now treats `<CR>` as confirmation (instead of inserting one)
+"   - Minor symbol changes for Airline
+"
 " Wed May 23 2018
 "   - Quick edit of this file now resolves symlink rather than hardcodes path
 "   - Reorganized the hotkeys section
@@ -75,6 +81,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'scrooloose/nerdtree'
     " Supertab is a code-completion tool
     Plug 'ervandew/supertab'
+    " Vim-css-color is a color-code highlighting plugin
+    Plug 'ap/vim-css-color'
 
 call plug#end()
 " }
@@ -93,7 +101,7 @@ call plug#end()
     filetype indent on  " Use indent files for specific filetypes
 
     set nobackup        " No swp files please
-    set nowritebackup   " ... even before writing
+    set nowritebackup   " ...even before writing
 " }
 
 " Formatting {
@@ -101,6 +109,7 @@ call plug#end()
     set breakindent     " Indent line-breaks to align with code
     set expandtab       " Fill tabs with spaces
     set nojoinspaces    " No extra space after '.' when joining lines
+    set nowrap          " By default, don't wrap lines
     set shiftwidth=4    " Set indentation depth to 4 columns
     set softtabstop=4   " Backspacing over 4 spaces like over tabs
     set tabstop=4       " Set tabular length to 4 columns
@@ -133,7 +142,7 @@ call plug#end()
         set pastetoggle=<F2>
     " }
     " Editing and formatting {
-        " Indentation with tab key 
+        " Indentation with tab key
         nnoremap <Tab> >>_
         nnoremap <S-Tab> <<
         inoremap <S-Tab> <C-d>
@@ -175,6 +184,12 @@ call plug#end()
         " See all the characters
         set list
         set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:+
+        " Automatic views
+        augroup AutoSaveView
+            autocmd!
+            autocmd BufWinLeave * if &buftype !=# 'terminal' | silent! mkview
+            autocmd BufWinEnter * if &buftype !=# 'terminal' | silent! loadview
+        augroup END
     " }
     " Buffers, Tabs, Windows {
         " Buffers {
@@ -224,7 +239,7 @@ call plug#end()
     " Search Settings {
         set hlsearch    " Highlight search results
         set incsearch   " Do incremental search
-        set ignorecase  " Do case-insensitive search ...
+        set ignorecase  " Do case-insensitive search...
         set smartcase   " ...unless capital letters are used
         " Clear search
         nmap <silent> <Leader>/ :nohlsearch<CR>
@@ -276,10 +291,12 @@ call plug#end()
         let g:airline_symbols.branch = 'ᚠ'
         let g:airline_symbols.readonly = ''
         "let g:airline_symbols.linenr = '☰'
+        "let g:airline_symbols.linenr = ''
         let g:airline_symbols.linenr = '㏑'
         "let g:airline_symbols.maxlinenr = '㏑'
         let g:airline_symbols.maxlinenr = ''
         let g:airline_symbols.paste = 'PASTE'
+        "let g:airline_symbols.paste = 'Þ'
         let g:airline_symbols.spell = 'Ꞩ'
     " }
     " Bufferline {
@@ -316,8 +333,10 @@ call plug#end()
         nnoremap <silent> <Leader><Space> :NERDTreeToggle<CR>
     " }
     " Supertab {
-        " `<Esc>` during a tab completion undoes any completion
+        " Completion type is per word
         let g:SuperTabRetainCompletionDuration = 'completion'
+        " Select completion option with `<CR>` (instead of inserting newline)
+        let g:SuperTabCrMapping = 1
     " }
     " Neomake {
         " Let there be linters
