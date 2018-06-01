@@ -59,3 +59,18 @@ Host maglev
     Hostname 10.195.144.142
     Port 2222
     User maglev
+
+Host cimc
+    Hostname 10.195.144.141
+    User admin
+    # Password Lablab123
+
+Host arflab
+    Hostname 172.25.1.50
+    User root
+    # Password arflab
+    # Check /tftpboot/sgundred for images
+
+Host fujipc
+    Hostname 174.62.105.62
+    User baozi
