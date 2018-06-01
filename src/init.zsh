@@ -95,4 +95,9 @@ export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 alias ls='ls -GFh'
 alias python='python3'
 alias resrc='. ~/.zshrc'
-alias vi='vim'
+alias vi='nvim'
+
+###########
+# Source local-specific stuff
+
+source local_init.zsh &>/dev/null
