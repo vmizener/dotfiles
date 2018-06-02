@@ -10,7 +10,7 @@ My personalized dotfiles
 | init.zsh | .oh-my-zsh/custom | oh-my-zsh |
 | nethackrc | ~ ||
 | screenrc | ~ ||
-| tmux.conf | ~ | tmux plugin manager |
+| tmux.conf | ~ | install submodule and link in ~/.tmux|
 | vimrc | ~ | vim 8+ |
 | zshrc | ~ ||
 

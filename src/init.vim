@@ -83,6 +83,8 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'ervandew/supertab'
     " Vim-css-color is a color-code highlighting plugin
     Plug 'ap/vim-css-color'
+    " Vim-sneak is a convenient motion command
+    Plug 'justinmk/vim-sneak'
 
 call plug#end()
 " }
@@ -202,14 +204,14 @@ call plug#end()
             nnoremap <silent> <Leader>bk :lclose\|b#\|bd! #<CR>
         " }
         " Tabs {
-            nnoremap th  :tabfirst<CR>
-            nnoremap tk  :tabnext<CR>
-            nnoremap tj  :tabprev<CR>
-            nnoremap tl  :tablast<CR>
-            nnoremap te  :tabedit<Space>
-            nnoremap tn  :tabnew<CR>
-            nnoremap tm  :tabmove<Space>
-            nnoremap td  :tabclose<CR>
+            nnoremap <Leader>th  :tabfirst<CR>
+            nnoremap <Leader>tk  :tabnext<CR>
+            nnoremap <Leader>tj  :tabprev<CR>
+            nnoremap <Leader>tl  :tablast<CR>
+            nnoremap <Leader>te  :tabedit<Space>
+            nnoremap <Leader>tn  :tabnew<CR>
+            nnoremap <Leader>tm  :tabmove<Space>
+            nnoremap <Leader>td  :tabclose<CR>
         " }
         " Windows {
             tnoremap <C-h> <C-\><C-n><C-w>h
@@ -331,6 +333,19 @@ call plug#end()
     " Nerdtree {
         " Toggle the tree
         nnoremap <silent> <Leader><Space> :NERDTreeToggle<CR>
+    " }
+    " Sneak {
+        " Respect case sensitivity settings
+        let g:sneak#use_ic_scs = 1
+        " Use labels
+        let g:sneak#label = 1
+        map s <Plug>SneakLabel_s
+        map S <Plug>SneakLabel_S
+        " Upgrade FfTt
+        map f <Plug>Sneak_f
+        map F <Plug>Sneak_F
+        map t <Plug>Sneak_t
+        map T <Plug>Sneak_T
     " }
     " Supertab {
         " Completion type is per word
